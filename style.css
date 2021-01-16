@@ -1,0 +1,18 @@
+html, body {
+  width: 100px;
+}
+
+body {
+  background-color: #d2d2c8;
+  font: 11px "Open Sans","Lucida Grande",Verdana,Arial,Helvetica,Geneva,sans-serif;
+}
+
+.command {
+  line-height: 1.5em;
+}
+
+.command:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
