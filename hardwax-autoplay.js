@@ -39,7 +39,7 @@ function run() {
         playRecord(records[currentRecordIdx]);
       };
     } else {
-      clearInterval(i);
+      clearInterval(runningId);
     };
   }, 5000);
 }
