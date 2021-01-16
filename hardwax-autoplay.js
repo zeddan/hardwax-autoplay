@@ -1,28 +1,9 @@
 "use strict";
 
-function playRecord(record) {
-  if (record) {
-    record.querySelectorAll("ul.tracklisting")[0].children[0].getElementsByTagName("a")[0].click();
-  };
-}
-
-function isPlaying(record) {
-  return (record.querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing").length > 0);
-}
-
-function stop() {
-  let currentTrack = records[currentRecordIdx].querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing")
-
-  if (currentTrack.length > 0) {
-    currentTrack[0].getElementsByTagName("a")[0].click();
-  }
-
-  clearInterval(runningId);
-}
-
 let runningId = -1;
 let currentRecordIdx = -1;
-let records = []
+let records = [];
+let currentUrl = undefined;
 
 function run() {
   currentRecordIdx = 0
@@ -44,10 +25,44 @@ function run() {
   }, 5000);
 }
 
+function stop() {
+  let currentTrack = records[currentRecordIdx].querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing");
+
+  if (currentTrack.length > 0) {
+    currentTrack[0].getElementsByTagName("a")[0].click();
+  }
+
+  clearInterval(runningId);
+}
+
+function pause() {
+  let currentTrack = records[currentRecordIdx].querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing");
+
+  if (currentTrack.length > 0) {
+    currentUrl = currentTrack[0].children[0].href;
+  }
+
+  stop();
+}
+
+function resume() {
+  records[currentRecordIdx].querySelectorAll(`[href='${currentUrl}']`)[0].click();
+}
+
+function playRecord(record) {
+  if (record) {
+    record.querySelectorAll("ul.tracklisting")[0].children[0].getElementsByTagName("a")[0].click();
+  };
+}
+
+function isPlaying(record) {
+  return (record.querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing").length > 0);
+}
+
 browser.runtime.onMessage.addListener(menu => {
-  if      (menu.command === "run")   { run();	  }
-  else if (menu.command === "stop")  { stop();  }
-  else if (menu.command === "pause") { pause(); }
-  else if (menu.command === "reset") { reset(); }
+  if      (menu.command === "run")    { run();    }
+  else if (menu.command === "stop")   { stop();   }
+  else if (menu.command === "pause")  { pause();  }
+  else if (menu.command === "resume") { resume(); }
 });
 

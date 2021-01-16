@@ -35,10 +35,10 @@ document.getElementById("pause").addEventListener("click", (e) => {
   }).then((tabs) => sendCommand(tabs, "pause")).catch(onError);
 });
 
-document.getElementById("reset").addEventListener("click", (e) => {
+document.getElementById("resume").addEventListener("click", (e) => {
   browser.tabs.query({
     currentWindow: true,
     active: true
-  }).then((tabs) => sendCommand(tabs, "reset")).catch(onError);
+  }).then((tabs) => sendCommand(tabs, "resume")).catch(onError);
 });
 
