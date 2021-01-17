@@ -17,8 +17,6 @@ function run() {
 function stop() {
   if (!currentUrl) { return; }
   document.querySelector(`[href='${currentUrl}']`).click();
-  stopLoop();
-  currentUrl = undefined;
 }
 
 function pause() {
