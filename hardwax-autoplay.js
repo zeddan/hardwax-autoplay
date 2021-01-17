@@ -83,7 +83,7 @@ function playFirstTrackOfRecord(record) {
 }
 
 function isPlaying(record) {
-  return (record.querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing").length > 0);
+  return !!record.querySelector("ul.tracklisting li.playing");
 }
 
 function getRecordByTrack(child) {
