@@ -1,28 +1,18 @@
 "use strict";
 
-let runningId = -1;
-let currentRecordIdx = -1;
 let records = [];
+let currentRecordIdx = -1;
 let currentUrl = undefined;
+let runningId = undefined;
+let paused = false;
 
 function run() {
-  currentRecordIdx = 0
+  currentRecordIdx = 0;
   records = document.querySelectorAll('*[id^="record"]');
-  let retries = 0;
 
+  addClickListeners(records);
   playRecord(records[currentRecordIdx]);
-
-  runningId = setInterval(() => {
-    if (currentRecordIdx < records.length || retries > 5) {
-      if (!isPlaying(records[currentRecordIdx])) {
-        currentRecordIdx += 1;
-        retries += 1;
-        playRecord(records[currentRecordIdx]);
-      };
-    } else {
-      clearInterval(runningId);
-    };
-  }, 5000);
+  runLoop();
 }
 
 function stop() {
@@ -31,22 +21,63 @@ function stop() {
   if (currentTrack.length > 0) {
     currentTrack[0].getElementsByTagName("a")[0].click();
   }
-
-  clearInterval(runningId);
+  
+  stopLoop();
+  currentUrl = undefined;
 }
 
 function pause() {
-  let currentTrack = records[currentRecordIdx].querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing");
-
-  if (currentTrack.length > 0) {
-    currentUrl = currentTrack[0].children[0].href;
-  }
-
-  stop();
+  if (!currentUrl) { return; }
+  paused = true;
+  document.querySelector(`[href='${currentUrl}']`).click();
+  clearInterval(runningId);
+  runningId = undefined;
 }
 
 function resume() {
-  records[currentRecordIdx].querySelectorAll(`[href='${currentUrl}']`)[0].click();
+  if (!currentUrl) { return; }
+  document.querySelector(`[href='${currentUrl}']`).click();
+}
+
+
+function addClickListeners(records) {
+  let tracks = document.querySelectorAll(".download_listen");
+  for (let track of tracks) {
+    track.addEventListener("click", function() {
+      if (track.href === currentUrl) {
+        stopLoop();
+        if (!paused) {
+          currentUrl = undefined;
+        }
+      } else {
+        currentUrl = track.href;
+        currentRecordIdx = Array.from(records).indexOf(getRecordByTrack(track));
+        runLoop();
+      }
+    });
+  }
+}
+
+function runLoop() {
+  if (runningId) { return; }
+  paused = false;
+  let retries = 0;
+  runningId = setInterval(() => {
+    if (currentRecordIdx < records.length || retries > 5) {
+      if (!isPlaying(records[currentRecordIdx])) {
+        currentRecordIdx += 1;
+        retries += 1;
+        playRecord(records[currentRecordIdx]);
+      };
+    } else {
+      stopLoop();
+    };
+  }, 5000);
+}
+
+function stopLoop() {
+  clearInterval(runningId);
+  runningId = undefined;
 }
 
 function playRecord(record) {
@@ -57,6 +88,17 @@ function playRecord(record) {
 
 function isPlaying(record) {
   return (record.querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing").length > 0);
+}
+
+function getRecordByTrack(child) {
+  let parentElement = child.parentElement;
+  while (parentElement.id !== "content") {
+    if (parentElement.id.startsWith("record")) {
+      return parentElement;
+    } else {
+      parentElement = parentElement.parentElement;
+    }
+  }
 }
 
 browser.runtime.onMessage.addListener(menu => {
