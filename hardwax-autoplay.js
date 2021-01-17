@@ -25,8 +25,6 @@ function pause() {
   if (!currentUrl) { return; }
   paused = true;
   document.querySelector(`[href='${currentUrl}']`).click();
-  clearInterval(runningId);
-  runningId = undefined;
 }
 
 function resume() {
