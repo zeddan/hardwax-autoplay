@@ -78,7 +78,7 @@ function stopLoop() {
 
 function playRecord(record) {
   if (record) {
-    record.querySelectorAll("ul.tracklisting")[0].children[0].getElementsByTagName("a")[0].click();
+    record.querySelectorAll("ul.tracklisting a")[0].click()
   };
 }
 
