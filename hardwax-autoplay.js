@@ -11,7 +11,7 @@ function run() {
   records = document.querySelectorAll('*[id^="record"]');
 
   addClickListeners(records);
-  playRecord(records[currentRecordIdx]);
+  playFirstTrackOfRecord(records[currentRecordIdx]);
   runLoop();
 }
 
@@ -63,7 +63,7 @@ function runLoop() {
       if (!isPlaying(records[currentRecordIdx])) {
         currentRecordIdx += 1;
         retries += 1;
-        playRecord(records[currentRecordIdx]);
+        playFirstTrackOfRecord(records[currentRecordIdx]);
       };
     } else {
       stopLoop();
@@ -76,7 +76,7 @@ function stopLoop() {
   runningId = undefined;
 }
 
-function playRecord(record) {
+function playFirstTrackOfRecord(record) {
   if (record) {
     record.querySelectorAll("ul.tracklisting a")[0].click()
   };
