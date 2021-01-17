@@ -9,7 +9,6 @@ let paused = false;
 function run() {
   currentRecordIdx = 0;
   records = document.querySelectorAll('*[id^="record"]');
-
   addClickListeners(records);
   playFirstTrackOfRecord(records[currentRecordIdx]);
   runLoop();
@@ -35,7 +34,6 @@ function resume() {
   document.querySelector(`[href='${currentUrl}']`).click();
 }
 
-
 function addClickListeners(records) {
   let tracks = document.querySelectorAll(".download_listen");
   for (let track of tracks) {
@@ -47,7 +45,7 @@ function addClickListeners(records) {
         }
       } else {
         currentUrl = track.href;
-        currentRecordIdx = Array.from(records).indexOf(getRecordByTrack(track));
+        currentRecordIdx = getRecordIdx(track);
         runLoop();
       }
     });
@@ -84,6 +82,10 @@ function playFirstTrackOfRecord(record) {
 
 function isPlaying(record) {
   return !!record.querySelector("ul.tracklisting li.playing");
+}
+
+function getRecordIdx(track) {
+  return Array.from(records).indexOf(getRecordByTrack(track));
 }
 
 function getRecordByTrack(child) {
