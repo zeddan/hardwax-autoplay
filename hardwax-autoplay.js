@@ -4,29 +4,38 @@ let records = [];
 let currentRecordIdx = -1;
 let currentUrl = undefined;
 let runningId = undefined;
-let paused = false;
+let pausing = false;
+let resuming = false;
+let started = false;
 
 function run() {
   currentRecordIdx = 0;
   records = document.querySelectorAll('*[id^="record"]');
-  addClickListeners(records);
+  if (isPlaying(records[currentRecordIdx])) { return; }
+  if (!started) {
+    addClickListeners(records);
+    started = true;
+  }
   playFirstTrackOfRecord(records[currentRecordIdx]);
   runLoop();
 }
 
 function stop() {
   if (!currentUrl) { return; }
+  if (pausing) { currentUrl = undefined; return; }
   document.querySelector(`[href='${currentUrl}']`).click();
 }
 
 function pause() {
   if (!currentUrl) { return; }
-  paused = true;
+  pausing = true;
   document.querySelector(`[href='${currentUrl}']`).click();
 }
 
 function resume() {
   if (!currentUrl) { return; }
+  if (isPlaying(records[currentRecordIdx])) { return; }
+  resuming = true;
   document.querySelector(`[href='${currentUrl}']`).click();
 }
 
@@ -34,9 +43,9 @@ function addClickListeners(records) {
   let tracks = document.querySelectorAll(".download_listen");
   for (let track of tracks) {
     track.addEventListener("click", function() {
-      if (track.href === currentUrl) {
+      if (track.href === currentUrl && !resuming) {
         stopLoop();
-        if (!paused) {
+        if (!pausing) {
           currentUrl = undefined;
         }
       } else {
@@ -50,7 +59,8 @@ function addClickListeners(records) {
 
 function runLoop() {
   if (runningId) { return; }
-  paused = false;
+  pausing = false;
+  resuming = false;
   let retries = 0;
   runningId = setInterval(() => {
     if (currentRecordIdx < records.length || retries > 5) {
