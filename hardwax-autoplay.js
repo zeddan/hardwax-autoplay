@@ -16,12 +16,8 @@ function run() {
 }
 
 function stop() {
-  let currentTrack = records[currentRecordIdx].querySelectorAll("ul.tracklisting")[0].querySelectorAll("li.playing");
-
-  if (currentTrack.length > 0) {
-    currentTrack[0].getElementsByTagName("a")[0].click();
-  }
-  
+  if (!currentUrl) { return; }
+  document.querySelector(`[href='${currentUrl}']`).click();
   stopLoop();
   currentUrl = undefined;
 }
