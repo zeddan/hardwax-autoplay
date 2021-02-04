@@ -20,7 +20,7 @@ First, go to http://hardwax.com and select a page that you want to autoplay. The
 
 ### Run
 
-Starts autoplaying. This will continue until all the previews on the page has been played unless no other action from the menu is taken.
+Starts autoplaying. This will continue until all the previews on the page have been played unless no other action from the menu is taken.
 When the script is running, you can select any preview and the autoplay will continue from that position.
 
 ### Stop
@@ -33,7 +33,7 @@ Pauses the autoplay and prepares for resuming at the position where it was pause
 
 ### Resume
 
-Resumes the autoplay from the position where it was paused, and continues until all the previews on the page has been played unless no other action from the menu is taken.
+Resumes the autoplay from the position where it was paused, and continues until all the previews on the page have been played unless no other action from the menu is taken.
 
 ## Contributing
 
