@@ -5,38 +5,39 @@
   let currentRecordIdx = -1;
   let currentUrl = undefined;
   let runningId = undefined;
-  let pausing = false;
-  let resuming = false;
-  let started = false;
+  let state = "stopped";
 
   function run() {
     currentRecordIdx = 0;
     records = document.querySelectorAll('*[id^="record"]');
     if (isPlaying(records[currentRecordIdx])) { return; }
-    if (!started) {
-      addClickListeners(records);
-      started = true;
-    }
+    addClickListeners(records);
+    state = "running"
     playFirstTrackOfRecord(records[currentRecordIdx]);
     runLoop();
   }
 
   function stop() {
-    if (!currentUrl) { return; }
-    if (pausing) { currentUrl = undefined; return; }
+    if (!currentUrl || state != "running") {
+      return;
+    }
+    state = "stopped"
     document.querySelector(`[href='${currentUrl}']`).click();
   }
 
   function pause() {
-    if (!currentUrl) { return; }
-    pausing = true;
+    if (!currentUrl || state != "running") {
+      return;
+    }
+    state = "paused"
     document.querySelector(`[href='${currentUrl}']`).click();
   }
 
   function resume() {
-    if (!currentUrl) { return; }
-    if (isPlaying(records[currentRecordIdx])) { return; }
-    resuming = true;
+    if (!currentUrl || state != "paused") {
+      return;
+    }
+    state = "running"
     document.querySelector(`[href='${currentUrl}']`).click();
   }
 
@@ -44,9 +45,9 @@
     let tracks = document.querySelectorAll(".download_listen");
     for (let track of tracks) {
       track.addEventListener("click", function() {
-        if (track.href === currentUrl && !resuming) {
+        if (track.href === currentUrl && state != "running") {
           stopLoop();
-          if (!pausing) {
+          if (state != "paused") {
             currentUrl = undefined;
           }
         } else {
@@ -60,8 +61,6 @@
 
   function runLoop() {
     if (runningId) { return; }
-    pausing = false;
-    resuming = false;
     let retries = 0;
     runningId = setInterval(() => {
       if (currentRecordIdx < records.length || retries > 5) {
