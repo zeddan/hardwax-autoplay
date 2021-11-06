@@ -18,27 +18,19 @@
   }
 
   function stop() {
-    if (!currentUrl || state != "running") {
-      return;
-    }
     state = "stopped"
-    document.querySelector(`[href='${currentUrl}']`).click();
+    stopLoop();
+    document.querySelector("a.playing")?.click()
   }
 
   function pause() {
-    if (!currentUrl || state != "running") {
-      return;
-    }
     state = "paused"
-    document.querySelector(`[href='${currentUrl}']`).click();
+    document.querySelector("a.playing")?.click()
   }
 
   function resume() {
-    if (!currentUrl || state != "paused") {
-      return;
-    }
     state = "running"
-    document.querySelector(`[href='${currentUrl}']`).click();
+    document.querySelector(`[href='${currentUrl}']`)?.click();
   }
 
   function addClickListeners(records) {
