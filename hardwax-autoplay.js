@@ -61,12 +61,10 @@
 
   function runLoop() {
     if (loopId) { return; }
-    let retries = 0;
     loopId = setInterval(() => {
-      if (currentRecordIdx < records.length || retries > 5) {
+      if (currentRecordIdx < records.length) {
         if (!isPlaying(records[currentRecordIdx])) {
           currentRecordIdx += 1;
-          retries += 1;
           playFirstTrackOfRecord(records[currentRecordIdx]);
         };
       } else {
