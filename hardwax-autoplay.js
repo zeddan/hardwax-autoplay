@@ -4,7 +4,7 @@
   let records = [];
   let currentRecordIdx = -1;
   let currentUrl = undefined;
-  let runningId = undefined;
+  let loopId = undefined;
   let state = "stopped";
 
   function run() {
@@ -60,9 +60,9 @@
   }
 
   function runLoop() {
-    if (runningId) { return; }
+    if (loopId) { return; }
     let retries = 0;
-    runningId = setInterval(() => {
+    loopId = setInterval(() => {
       if (currentRecordIdx < records.length || retries > 5) {
         if (!isPlaying(records[currentRecordIdx])) {
           currentRecordIdx += 1;
@@ -76,8 +76,8 @@
   }
 
   function stopLoop() {
-    clearInterval(runningId);
-    runningId = undefined;
+    clearInterval(loopId);
+    loopId = undefined;
   }
 
   function playFirstTrackOfRecord(record) {
