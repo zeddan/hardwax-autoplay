@@ -1,4 +1,7 @@
 ![logo](https://raw.githubusercontent.com/zeddan/hardwax-autoplay/main/icons/hardwax-autoplay-32.png)
+
+### _Deprecation note: This feature is now implemented on the official website._ ###
+
 # hardwax-autoplay
 
 A Firefox addon for autoplaying previews at https://hardwax.com
